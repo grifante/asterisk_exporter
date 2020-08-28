@@ -1,0 +1,12 @@
+[Unit]
+Description=Asterisk Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+ExecStart=/opt/prometheus/asterisk-exporter/asterisk_exporter.sh
+Restart=always
+
+[Install]
+WantedBy=default.target

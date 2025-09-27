@@ -53,9 +53,9 @@ collect () {
   append_counter "asterisk_last_core_reload_seconds" $AST_LAST_RELOAD_SEC
 
   x=$(asterisk -rx 'core show channels' | tail -3)
-  AST_ACTIVE_CHANNELS=$(echo $x | cut -d' ' -f1)
-  AST_ACTIVE_CALLS=$(echo $x | cut -d' ' -f4)
-  AST_CALLS_PROCESSED=$(echo $x | cut -d' ' -f7)
+  AST_ACTIVE_CHANNELS=$(echo $x | grep 'active channels' | cut -d' ' -f1)
+  AST_ACTIVE_CALLS=$(echo $x | grep 'max active calls' | cut -d' ' -f1)
+  AST_CALLS_PROCESSED=$(echo $x | grep 'calls processed' | cut -d' ' -f1)
 
   append_gauge_header "asterisk_active_channels"
   append_gauge "asterisk_active_channels" $AST_ACTIVE_CHANNELS
@@ -74,15 +74,6 @@ collect () {
     thread=$(echo "$line" | awk '{$1=""; sub(/^ +/, ""); print}')
     append_gauge "asterisk_core_threads" "$count" "thread" "$thread"
   done <<< "$AST_THREADS"
-  ###
-
-  AST_EXTEN_UNKNOWN_STATUS=$(asterisk -rx 'sip show peers' | grep -P '^\d{3,}.*UNKNOWN\s' | wc -l)
-  append_gauge_header "asterisk_exten_status_unknown"
-  append_gauge "asterisk_exten_status_unknown" $AST_EXTEN_UNKNOWN_STATUS
-
-  AST_EXTEN_QUALIFIED_STATUS=$(asterisk -rx 'sip show peers' | grep -P '^\d{3,}.*OK\s\(\d+' | wc -l)
-  append_gauge_header  "asterisk_exten_status_qualified"
-  append_gauge  "asterisk_exten_status_qualified" $AST_EXTEN_QUALIFIED_STATUS
 }
 
 while true

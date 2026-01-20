@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SCRAPE_INTERVAL=10
-METRIC_FILE="/opt/prometheus/custom-metrics/asterisk.prom"
-TEMP_FILE=$(mktemp)
+SCRAPE_INTERVAL=${SCRAPE_INTERVAL:-10}
+METRIC_FILE="${METRIC_FILE:-/opt/prometheus/custom-metrics/asterisk.prom}"
+TEMP_FILE="${TEMP_FILE:-$(mktemp)}"
 
 process_labels() {
 	labels="{"

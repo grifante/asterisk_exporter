@@ -41,6 +41,7 @@ append_counter() {
 }
 
 publish () {
+  chmod 0644 $TEMP_FILE
   mv -f $TEMP_FILE $METRIC_FILE
 }
 
